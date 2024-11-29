@@ -7,7 +7,7 @@
       </div>
       <el-menu
         class="menu"
-        router 
+        router
         default-active="/"
         :collapse="isCollapse"
         :collapse-transition="false"

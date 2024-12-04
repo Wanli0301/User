@@ -49,6 +49,13 @@
       </el-header>
       
       <el-main class="main">
+        <el-breadcrumb class="breadcrumb">
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item v-if="route.name !== 'UserList'">
+            {{ getBreadcrumbTitle() }}
+          </el-breadcrumb-item>
+        </el-breadcrumb>
+        
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">
             <component :is="Component" />
@@ -61,7 +68,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '../stores/user'
 import { ElMessageBox } from 'element-plus'
 import { 
@@ -75,6 +82,7 @@ import {
 const router = useRouter()
 const userStore = useUserStore()
 const isCollapse = ref(false)
+const route = useRoute()
 
 const toggleCollapse = () => {
   isCollapse.value = !isCollapse.value
@@ -99,6 +107,19 @@ const handleCommand = async (command) => {
     }
   } else if (command === 'profile') {
     router.push('/profile')
+  }
+}
+
+const getBreadcrumbTitle = () => {
+  switch (route.name) {
+    case 'UserCreate':
+      return '添加用户'
+    case 'UserEdit':
+      return '编辑用户'
+    case 'Profile':
+      return '个人信息'
+    default:
+      return ''
   }
 }
 </script>
@@ -223,5 +244,13 @@ const handleCommand = async (command) => {
 .fade-leave-to {
   opacity: 0;
   transform: translateX(-10px);
+}
+
+.breadcrumb {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 }
 </style> 
